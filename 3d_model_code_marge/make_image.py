@@ -141,6 +141,8 @@ if __name__ == "__main__":
             currentScale = (lm3[0] - lm6[0]) / 190
             offset = int(200 * currentScale), int(300 * currentScale)
 
+            
+
             try:
                 #img = cvzone.overlayPNG(img, imgShirt, (lm6[0] - offset[0], lm6[1] - offset[1]))
                 img = cvzone.overlayPNG(img, imgShirt, (lm0[0]- offset[0], lm0[1]- offset[1]))
@@ -151,3 +153,4 @@ if __name__ == "__main__":
             cv2.waitKey(1)
 
     bpy.ops.wm.quit_blender()
+
