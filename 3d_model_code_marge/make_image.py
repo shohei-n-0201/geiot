@@ -25,7 +25,7 @@ def rendering(camera_num, size):
     scene.render.image_settings.color_mode = 'RGBA'
     scene.render.film_transparent = True
 
-    bpy.context.scene.cycles.samples = 4  # サンプル数をさらに減らす
+    bpy.context.scene.cycles.samples = 2  # サンプル数をさらに減らす
     bpy.context.scene.cycles.use_denoising = True  # デノイザーを使用
     bpy.context.scene.cycles.max_bounces = 1  # ライトパスの減少
     bpy.context.scene.render.engine = 'BLENDER_EEVEE'  # Eeveeを使用
@@ -42,9 +42,9 @@ def rendering(camera_num, size):
 def rotate_all_objects(rotate_x, rotate_y, rotate_z):
     for obj in bpy.data.objects:
         if obj.type == 'MESH':
-            obj.rotation_euler[0] = rotate_x
-            obj.rotation_euler[1] = rotate_y
-            obj.rotation_euler[2] = rotate_z - 3
+            obj.rotation_euler[0] = np.pi - rotate_x + 0.5
+            obj.rotation_euler[1] = np.pi - rotate_y + 1.5
+            obj.rotation_euler[2] = np.pi - rotate_z + 4.5
 
 def get_rotation_matrix(face_vector, mouth_vector):
     x_axis = mouth_vector / np.linalg.norm(mouth_vector)
@@ -66,8 +66,8 @@ if __name__ == "__main__":
 
     shirtFolderPath = "Image"
     listShirts = os.listdir(shirtFolderPath)
-    fixedRatio = 320 / 190
-    shirtRatioHeightWidth = 150 / 500
+    fixedRatio = 450 / 190
+    shirtRatioHeightWidth = 400 / 500
     imageNumber = 0
     imgButtonRight = cv2.imread("Resources/button.png", cv2.IMREAD_UNCHANGED)
     imgButtonLeft = cv2.flip(imgButtonRight, 1)
@@ -139,10 +139,11 @@ if __name__ == "__main__":
             widthOfShirt = int((lm3[0] - lm6[0]) * fixedRatio)
             imgShirt = cv2.resize(imgShirt, (widthOfShirt, int(widthOfShirt * shirtRatioHeightWidth)))
             currentScale = (lm3[0] - lm6[0]) / 190
-            offset = int(44 * currentScale), int(48 * currentScale)
+            offset = int(200 * currentScale), int(300 * currentScale)
 
             try:
-                img = cvzone.overlayPNG(img, imgShirt, (lm6[0] - offset[0], lm6[1] - offset[1]))
+                #img = cvzone.overlayPNG(img, imgShirt, (lm6[0] - offset[0], lm6[1] - offset[1]))
+                img = cvzone.overlayPNG(img, imgShirt, (lm0[0]- offset[0], lm0[1]- offset[1]))
             except:
                 pass
 
@@ -150,4 +151,3 @@ if __name__ == "__main__":
             cv2.waitKey(1)
 
     bpy.ops.wm.quit_blender()
-
